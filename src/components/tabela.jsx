@@ -5,10 +5,10 @@ import { useSignals, useSignal } from '@preact/signals-react/runtime';
 import axios from 'axios';
 import { useEffect } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
+import { atualizar, dadosPacientes } from '../signals';
 function Tabela() {
 	useSignals();
 	const apiUrl = import.meta.env.VITE_API_URL;
-	const dadosPacientes = useSignal([]);
 	const recuperarDados = async () => {
 		const response = await axios.get(`${apiUrl}/registros`);
 
@@ -18,7 +18,7 @@ function Tabela() {
 
 	useEffect(() => {
 		recuperarDados();
-	}, []);
+	}, [atualizar.value]);
 	return (
 		<CoreTableContainer component={Paper}>
 			<Table>
@@ -31,8 +31,8 @@ function Tabela() {
 					</TableRow>
 				</CoreTableHead>
 				<TableBody>
-					{dadosPacientes.value.length > 0 ? (
-						dadosPacientes.value.map((paciente, index) => (
+					{dadosPacientes.value?.length > 0 ? (
+						dadosPacientes.value?.map((paciente, index) => (
 							<TableRow>
 								<TableCell>{paciente.nome_paciente}</TableCell>
 								<TableCell>{paciente.data_entrada}</TableCell>

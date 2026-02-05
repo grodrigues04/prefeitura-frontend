@@ -8,7 +8,7 @@ import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
 import { alfabeto } from '../Common/constantes.js';
-import { modalAberto } from '../signals/index.js';
+import { modalAberto, cadastroAlerta } from '../signals/index.js';
 import Cadastro from './cadastro.jsx';
 import Modal from '@mui/material/Modal';
 import { useSignals, useSignal } from '@preact/signals-react/runtime';
@@ -21,8 +21,11 @@ function Pesquisa() {
 	};
 
 	const handleCloseModal = () => {
-		console.log('abrindo');
 		modalAberto.value = !modalAberto.value;
+		if (!modalAberto.value) {
+			//Se o modal estiver fechado, tira o alerta de cadastro
+			cadastroAlerta.value = false;
+		}
 		console.log('modalAberto.value', modalAberto.value);
 	};
 	return (

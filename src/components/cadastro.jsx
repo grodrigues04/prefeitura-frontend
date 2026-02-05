@@ -8,21 +8,31 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TextField } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { modalAberto } from '../signals/index.js';
+import { modalAberto, cadastroAlerta, atualizar } from '../signals/index.js';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { Stack } from '@mui/material';
 import dayjs from 'dayjs';
 import axios from 'axios';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 function Cadastro() {
 	useSignals();
 	const currentYear = dayjs();
 	const { control, handleSubmit } = useForm();
+	const apiUrl = import.meta.env.VITE_API_URL;
 	const cadastrar = (data) => {
+		cadastroAlerta.value = false;
 		data.saida_exame = data.saida_exame.format('DD/MM/YYYY');
 		data.data_entrada = data.data_entrada.format('DD/MM/YYYY');
-		axios.post('http://localhost:3000/cadastro', {
-			data: data
-		});
+		axios
+			.post(`${apiUrl}/cadastro`, {
+				data: data
+			})
+			.then(() => {
+				cadastroAlerta.value = true;
+				atualizar.value = data;
+			})
+			.catch(() => {});
 	};
 
 	return (
@@ -61,12 +71,13 @@ function Cadastro() {
 						</Grid>
 						<Grid item>
 							<Controller
-								name="saida_exame"
+								name="data_entrada"
 								control={control}
 								render={({ field }) => (
 									<LocalizationProvider dateAdapter={AdapterDayjs}>
 										<DatePicker
-											label="Saída dos exames"
+											maxDate={currentYear}
+											label="Data de entrada"
 											value={field.value || null}
 											onChange={(newValue) => field.onChange(newValue)}
 											slotProps={{
@@ -82,13 +93,12 @@ function Cadastro() {
 						</Grid>
 						<Grid item>
 							<Controller
-								name="data_entrada"
+								name="saida_exame"
 								control={control}
 								render={({ field }) => (
 									<LocalizationProvider dateAdapter={AdapterDayjs}>
 										<DatePicker
-											maxDate={currentYear}
-											label="Data de entrada"
+											label="Saída dos exames"
 											value={field.value || null}
 											onChange={(newValue) => field.onChange(newValue)}
 											slotProps={{
@@ -110,6 +120,14 @@ function Cadastro() {
 					>
 						Cadastrar
 					</Button>
+					{cadastroAlerta.value && (
+						<Alert
+							icon={<CheckIcon fontSize="inherit" />}
+							severity="success"
+						>
+							Cadastro realizado com sucesso
+						</Alert>
+					)}
 				</Stack>
 			</form>
 		</Box>
