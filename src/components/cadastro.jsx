@@ -1,5 +1,6 @@
 import { useForm, Controller } from 'react-hook-form';
 import { useSignals, useSignal } from '@preact/signals-react/runtime';
+import { batch } from '@preact/signals';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -21,7 +22,8 @@ import LinearProgress from '@mui/material/LinearProgress';
 function Cadastro() {
 	useSignals();
 	const carregando = useSignal(false);
-
+	const openDataEntrada = useSignal(false);
+	const openDataSaida = useSignal(false);
 	const defaultValues = useSignal();
 	const currentYear = dayjs();
 	const { control, handleSubmit, reset } = useForm({});
@@ -107,15 +109,27 @@ function Cadastro() {
 										<DatePicker
 											maxDate={currentYear}
 											label="Data de entrada"
+											open={openDataEntrada.value}
+											// onClick={() => {
+											// 	batch(() => {
+											// 		openDataEntrada.value = true;
+											// 		// openDataSaida.value = false;
+											// 	});
+											// }}
+											onOpen={() => {
+												batch(() => {
+													openDataEntrada.value = true;
+													openDataSaida.value = false;
+												});
+											}}
+											onClose={() => (openDataEntrada.value = false)}
 											value={field.value || null}
 											onChange={(newValue) => field.onChange(newValue)}
 											slotProps={{
 												textField: {
 													required: true,
 													fullWidth: true,
-													inputProps: {
-														readOnly: true
-													}
+													onClick: () => (openDataEntrada.value = true)
 												}
 											}}
 										/>
@@ -132,14 +146,22 @@ function Cadastro() {
 										<DatePicker
 											label="Saída dos exames"
 											value={field.value || null}
-											onChange={(newValue) => field.onChange(newValue)}
+											open={openDataSaida.value}
+											onOpen={() => {
+												batch(() => {
+													openDataSaida.value = true;
+													openDataEntrada.value = false;
+												});
+											}}
+											onClose={() => (openDataSaida.value = false)}
+											onChange={(newValue) => {
+												field.onChange(newValue);
+											}}
 											slotProps={{
 												textField: {
 													required: true,
 													fullWidth: true,
-													inputProps: {
-														readOnly: true
-													}
+													onClick: () => (openDataSaida.value = true)
 												}
 											}}
 										/>
