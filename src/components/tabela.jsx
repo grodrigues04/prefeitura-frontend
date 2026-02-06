@@ -16,7 +16,8 @@ import {
 	modalAberto,
 	modalExclusao,
 	page,
-	filtroNome
+	filtroNome,
+	filtroLetra
 } from '../signals';
 function Tabela() {
 	useSignals();
@@ -29,10 +30,14 @@ function Tabela() {
 
 	useSignalEffect(() => {
 		const nome = filtroNome.value.toLowerCase();
-
+		if (filtroNome.value) {
+			filtroLetra.value = '';
+		}
 		const filtrados = nome
 			? dadosPacientes.value.filter((item) => item.nome_paciente.toLowerCase().includes(nome))
-			: dadosPacientes.value;
+			: filtroLetra.value
+				? dadosPacientes.value.filter((item) => item.nome_paciente.toLowerCase().startsWith(filtroLetra.value))
+				: dadosPacientes.value;
 
 		dadosTabela.value = filtrados.slice(
 			page.value * rowsPerPage.value,

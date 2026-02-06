@@ -10,3 +10,4 @@ export const page = signal(0);
 export const ehAlteracao = signal(false);
 export const pacienteSelecionado = signal(null);
 export const filtroNome = signal(null);
+export const filtroLetra = signal('');

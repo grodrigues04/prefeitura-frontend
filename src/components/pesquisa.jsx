@@ -16,7 +16,8 @@ import {
 	dadosTabela,
 	dadosPacientes,
 	page,
-	filtroNome
+	filtroNome,
+	filtroLetra
 } from '../signals/index.js';
 import Exclusao from './exclusao.jsx';
 import Cadastro from './cadastro.jsx';
@@ -25,13 +26,15 @@ import { useSignals, useSignal } from '@preact/signals-react/runtime';
 import { useEffect } from 'react';
 function Pesquisa() {
 	useSignals();
-	const filtroLetra = useSignal('');
-	const { control, handleSubmit, watch } = useForm();
+
+	const { control, setValue, watch, reset } = useForm();
 	useEffect(() => {
 		filtroNome.value = watch('nome') || '';
+		if (filtroNome.value) {
+			filtroLetra.value = '';
+		}
 		page.value = 0;
 	}, [watch('nome')]);
-
 	useEffect(() => {
 		if (!modalAberto.value) {
 			ehAlteracao.value = false;
@@ -108,7 +111,9 @@ function Pesquisa() {
 						label={letra}
 						color="primary"
 						onClick={(e) => {
-							filtroLetra.value = letra;
+							reset();
+							setValue('nome', '');
+							filtroLetra.value = letra.toLowerCase();
 						}}
 					/>
 				))}
