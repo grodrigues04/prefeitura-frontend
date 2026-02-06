@@ -7,11 +7,20 @@ import { useEffect } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import TablePagination from '@mui/material/TablePagination';
-import { atualizar, dadosPacientes, ehAlteracao, pacienteSelecionado, modalAberto, modalExclusao } from '../signals';
+import {
+	atualizar,
+	dadosTabela,
+	dadosPacientes,
+	ehAlteracao,
+	pacienteSelecionado,
+	modalAberto,
+	modalExclusao,
+	page,
+	filtroNome
+} from '../signals';
 function Tabela() {
 	useSignals();
 	const apiUrl = import.meta.env.VITE_API_URL;
-	const dadosTabela = useSignal([]);
 
 	const recuperarDados = async () => {
 		const response = await axios.get(`${apiUrl}/registros`);
@@ -19,13 +28,18 @@ function Tabela() {
 	};
 
 	useSignalEffect(() => {
-		dadosTabela.value = dadosPacientes.value.slice(
+		const nome = filtroNome.value.toLowerCase();
+
+		const filtrados = nome
+			? dadosPacientes.value.filter((item) => item.nome_paciente.toLowerCase().includes(nome))
+			: dadosPacientes.value;
+
+		dadosTabela.value = filtrados.slice(
 			page.value * rowsPerPage.value,
 			page.value * rowsPerPage.value + rowsPerPage.value
 		);
 	});
 
-	const page = useSignal(0);
 	const rowsPerPage = useSignal(5);
 
 	const handleChangePage = (event, newPage) => {
@@ -37,7 +51,6 @@ function Tabela() {
 	};
 
 	useEffect(() => {
-		console.log('Atualizei');
 		recuperarDados();
 	}, [atualizar.value]);
 	return (

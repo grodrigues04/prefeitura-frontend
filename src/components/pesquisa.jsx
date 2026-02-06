@@ -8,7 +8,16 @@ import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
 import { alfabeto } from '../Common/constantes.js';
-import { modalAberto, cadastroAlerta, ehAlteracao, modalExclusao } from '../signals/index.js';
+import {
+	modalAberto,
+	cadastroAlerta,
+	ehAlteracao,
+	modalExclusao,
+	dadosTabela,
+	dadosPacientes,
+	page,
+	filtroNome
+} from '../signals/index.js';
 import Exclusao from './exclusao.jsx';
 import Cadastro from './cadastro.jsx';
 import Modal from '@mui/material/Modal';
@@ -17,10 +26,11 @@ import { useEffect } from 'react';
 function Pesquisa() {
 	useSignals();
 	const filtroLetra = useSignal('');
-	const { control, handleSubmit } = useForm();
-	const pesquisar = (data) => {
-		console.log('Data formulario', data);
-	};
+	const { control, handleSubmit, watch } = useForm();
+	useEffect(() => {
+		filtroNome.value = watch('nome') || '';
+		page.value = 0;
+	}, [watch('nome')]);
 
 	useEffect(() => {
 		if (!modalAberto.value) {
@@ -31,12 +41,10 @@ function Pesquisa() {
 
 	const handleCloseModal = () => {
 		modalAberto.value = !modalAberto.value;
-		console.log('modalAberto.value', modalAberto.value);
 	};
 
 	const handleCloseModalExclusao = () => {
 		modalExclusao.value = !modalExclusao.value;
-		console.log('modalExclusao.value', modalExclusao.value);
 	};
 	return (
 		<Box
@@ -49,7 +57,7 @@ function Pesquisa() {
 				gap: '10px'
 			}}
 		>
-			<form onSubmit={handleSubmit(pesquisar)}>
+			<form>
 				<Grid
 					container
 					spacing={{ xs: 1, sm: 2, md: 3 }}
@@ -80,7 +88,6 @@ function Pesquisa() {
 					>
 						<Button
 							variant="contained"
-							// type="submit"
 							onClick={handleCloseModal}
 						>
 							Cadastrar
