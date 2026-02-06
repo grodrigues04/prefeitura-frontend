@@ -8,31 +8,54 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TextField } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { modalAberto, cadastroAlerta, atualizar } from '../signals/index.js';
+import { modalAberto, cadastroAlerta, atualizar, pacienteSelecionado, ehAlteracao } from '../signals/index.js';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { Stack } from '@mui/material';
 import dayjs from 'dayjs';
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
+import { useEffect } from 'react';
 function Cadastro() {
 	useSignals();
+	const defaultValues = useSignal();
 	const currentYear = dayjs();
-	const { control, handleSubmit } = useForm();
+	const { control, handleSubmit, reset } = useForm({});
 	const apiUrl = import.meta.env.VITE_API_URL;
+	const mensagem = useSignal('');
+	useEffect(() => {
+		if (ehAlteracao.value) {
+			reset({
+				...pacienteSelecionado.value,
+				data_entrada: dayjs(pacienteSelecionado.value.data_entrada, 'DD/MM/YYYY'),
+				saida_exame: dayjs(pacienteSelecionado.value.saida_exame, 'DD/MM/YYYY')
+			});
+		}
+	}, []);
+
 	const cadastrar = (data) => {
 		cadastroAlerta.value = false;
 		data.saida_exame = data.saida_exame.format('DD/MM/YYYY');
 		data.data_entrada = data.data_entrada.format('DD/MM/YYYY');
+		data.alteracao = ehAlteracao.value;
 		axios
 			.post(`${apiUrl}/cadastro`, {
 				data: data
 			})
 			.then(() => {
+				mensagem.value = 'Cadastro realizado com sucesso!';
 				cadastroAlerta.value = true;
 				atualizar.value = data;
+				if (ehAlteracao.value) {
+					mensagem.value = 'Edição realizada com sucesso';
+				}
 			})
-			.catch(() => {});
+			.catch(() => {
+				console.log('Ocorreu um erro ao tentar cadastrar/editar o item');
+			})
+			.finally(() => {
+				ehAlteracao.value = false;
+			});
 	};
 
 	return (
@@ -120,12 +143,13 @@ function Cadastro() {
 					>
 						Cadastrar
 					</Button>
+
 					{cadastroAlerta.value && (
 						<Alert
 							icon={<CheckIcon fontSize="inherit" />}
-							severity="success"
+							severity={ehAlteracao.value ? 'info' : 'success'}
 						>
-							Cadastro realizado com sucesso
+							{mensagem.value}
 						</Alert>
 					)}
 				</Stack>

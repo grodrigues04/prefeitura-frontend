@@ -8,10 +8,12 @@ import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
 import { alfabeto } from '../Common/constantes.js';
-import { modalAberto, cadastroAlerta } from '../signals/index.js';
+import { modalAberto, cadastroAlerta, ehAlteracao, modalExclusao } from '../signals/index.js';
+import Exclusao from './exclusao.jsx';
 import Cadastro from './cadastro.jsx';
 import Modal from '@mui/material/Modal';
 import { useSignals, useSignal } from '@preact/signals-react/runtime';
+import { useEffect } from 'react';
 function Pesquisa() {
 	useSignals();
 	const filtroLetra = useSignal('');
@@ -20,13 +22,21 @@ function Pesquisa() {
 		console.log('Data formulario', data);
 	};
 
-	const handleCloseModal = () => {
-		modalAberto.value = !modalAberto.value;
+	useEffect(() => {
 		if (!modalAberto.value) {
-			//Se o modal estiver fechado, tira o alerta de cadastro
+			ehAlteracao.value = false;
 			cadastroAlerta.value = false;
 		}
+	}, [modalAberto.value]);
+
+	const handleCloseModal = () => {
+		modalAberto.value = !modalAberto.value;
 		console.log('modalAberto.value', modalAberto.value);
+	};
+
+	const handleCloseModalExclusao = () => {
+		modalExclusao.value = !modalExclusao.value;
+		console.log('modalExclusao.value', modalExclusao.value);
 	};
 	return (
 		<Box
@@ -114,6 +124,28 @@ function Pesquisa() {
 					}}
 				>
 					<Cadastro />
+				</Box>
+			</Modal>
+			<Modal
+				title="teste"
+				aria-labelledby="modal-modal-title"
+				open={modalExclusao.value}
+				onClose={handleCloseModalExclusao}
+			>
+				<Box
+					sx={{
+						position: 'absolute',
+						top: '50%',
+						left: '50%',
+						transform: 'translate(-50%, -50%)',
+						bgcolor: 'background.paper',
+						boxShadow: 24,
+						p: 4,
+						borderRadius: 2,
+						minWidth: 400
+					}}
+				>
+					<Exclusao />
 				</Box>
 			</Modal>
 		</Box>
