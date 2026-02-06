@@ -112,7 +112,10 @@ function Cadastro() {
 											slotProps={{
 												textField: {
 													required: true,
-													fullWidth: true
+													fullWidth: true,
+													inputProps: {
+														readOnly: true
+													}
 												}
 											}}
 										/>
@@ -133,7 +136,10 @@ function Cadastro() {
 											slotProps={{
 												textField: {
 													required: true,
-													fullWidth: true
+													fullWidth: true,
+													inputProps: {
+														readOnly: true
+													}
 												}
 											}}
 										/>
