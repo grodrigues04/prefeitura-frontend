@@ -4,11 +4,13 @@ import Typography from '@mui/material/Typography';
 import { pacienteSelecionado, modalAberto, modalExclusao, atualizar } from '../signals';
 import axios from 'axios';
 import { useSignals, useSignal } from '@preact/signals-react/runtime';
-
+import LinearProgress from '@mui/material/LinearProgress';
 function Exclusao() {
 	useSignals();
 	const apiUrl = import.meta.env.VITE_API_URL;
+	const carregando = useSignal(false);
 	const excluir = async () => {
+		carregando.value = true;
 		console.log(pacienteSelecionado.value);
 		axios
 			.delete(`${apiUrl}/deletar-paciente/${pacienteSelecionado.value._id}`)
@@ -18,6 +20,9 @@ function Exclusao() {
 			})
 			.catch(() => {
 				console.log('Ocorreu um erro', e);
+			})
+			.finally(() => {
+				carregando.value = false;
 			});
 	};
 	return (
@@ -54,6 +59,7 @@ function Exclusao() {
 			>
 				Cancelar
 			</Button>
+			{carregando.value && <LinearProgress />}
 		</Stack>
 	);
 }

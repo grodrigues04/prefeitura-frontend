@@ -16,8 +16,12 @@ import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
 import { useEffect } from 'react';
+import LinearProgress from '@mui/material/LinearProgress';
+
 function Cadastro() {
 	useSignals();
+	const carregando = useSignal(false);
+
 	const defaultValues = useSignal();
 	const currentYear = dayjs();
 	const { control, handleSubmit, reset } = useForm({});
@@ -34,6 +38,7 @@ function Cadastro() {
 	}, []);
 
 	const cadastrar = (data) => {
+		carregando.value = true;
 		cadastroAlerta.value = false;
 		data.saida_exame = data.saida_exame.format('DD/MM/YYYY');
 		data.data_entrada = data.data_entrada.format('DD/MM/YYYY');
@@ -54,6 +59,7 @@ function Cadastro() {
 				console.log('Ocorreu um erro ao tentar cadastrar/editar o item');
 			})
 			.finally(() => {
+				carregando.value = true;
 				ehAlteracao.value = false;
 			});
 	};
@@ -152,6 +158,7 @@ function Cadastro() {
 							{mensagem.value}
 						</Alert>
 					)}
+					{carregando.value && !cadastroAlerta.value && <LinearProgress />}
 				</Stack>
 			</form>
 		</Box>
