@@ -7,6 +7,8 @@ import { useEffect } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import TablePagination from '@mui/material/TablePagination';
+import LinearProgress from '@mui/material/LinearProgress';
+
 import {
 	atualizar,
 	dadosTabela,
@@ -22,10 +24,25 @@ import {
 function Tabela() {
 	useSignals();
 	const apiUrl = import.meta.env.VITE_API_URL;
-
+	const mensagemUser = useSignal('');
+	const carregandoDados = useSignal(true);
 	const recuperarDados = async () => {
-		const response = await axios.get(`${apiUrl}/registros`);
-		dadosPacientes.value = response.data.resposta;
+		axios
+			.get(`${apiUrl}/registros`)
+			.then((response) => {
+				dadosPacientes.value = response.data.resposta;
+				if (!response.data.resposta.length) {
+					mensagemUser.value = 'Sem dados disponiveis';
+				}
+			})
+			.catch((e) => {
+				mensagemUser.value = 'Ocorreu um erro interno. Tente recarregar a pagina';
+				console.log('Error');
+			})
+			.finally(() => {
+				carregandoDados.value = false;
+				console.log('terminou a requisicao');
+			});
 	};
 
 	useSignalEffect(() => {
@@ -99,9 +116,19 @@ function Tabela() {
 							))
 						) : (
 							<TableRow>
-								<TableCell>Sem dados disponiveis</TableCell>
+								<TableCell>{mensagemUser.value}</TableCell>
 							</TableRow>
 						)}
+						{carregandoDados.value && (
+							<TableRow>
+								<TableCell
+									colSpan={5}
+									sx={{ p: 0 }}
+								>
+									<LinearProgress />
+								</TableCell>
+							</TableRow>
+						)}{' '}
 					</TableBody>
 				</Table>
 				<TablePagination
