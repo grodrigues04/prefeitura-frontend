@@ -26,7 +26,7 @@ import { useSignals, useSignal } from '@preact/signals-react/runtime';
 import { useEffect } from 'react';
 function Pesquisa() {
 	useSignals();
-
+	const ultimaLetraClicada = useSignal('');
 	const { control, setValue, watch, reset } = useForm();
 	useEffect(() => {
 		filtroNome.value = watch('nome') || '';
@@ -109,11 +109,20 @@ function Pesquisa() {
 					<Chip
 						key={index}
 						label={letra}
-						color="primary"
-						onClick={(e) => {
+						color={letra.toLowerCase() === filtroLetra.value ? 'warning' : 'primary'}
+						onClick={() => {
+							const letraAtual = letra.toLowerCase();
+
+							if (ultimaLetraClicada.value === letraAtual) {
+								filtroLetra.value = '';
+								ultimaLetraClicada.value = '';
+							} else {
+								filtroLetra.value = letraAtual;
+								ultimaLetraClicada.value = letraAtual;
+							}
+
 							reset();
 							setValue('nome', '');
-							filtroLetra.value = letra.toLowerCase();
 						}}
 					/>
 				))}
