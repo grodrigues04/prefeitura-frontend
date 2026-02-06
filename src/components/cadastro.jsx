@@ -129,7 +129,10 @@ function Cadastro() {
 												textField: {
 													required: true,
 													fullWidth: true,
-													onClick: () => (openDataEntrada.value = true)
+													onClick: () => (openDataEntrada.value = true),
+													inputProps: {
+														readOnly: true
+													}
 												}
 											}}
 										/>

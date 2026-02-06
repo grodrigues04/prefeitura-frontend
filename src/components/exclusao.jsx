@@ -16,7 +16,7 @@ function Exclusao() {
 			.delete(`${apiUrl}/deletar-paciente/${pacienteSelecionado.value._id}`)
 			.then(() => {
 				modalExclusao.value = false;
-				atualizar.value = true;
+				atualizar.value = pacienteSelecionado.value._id;
 			})
 			.catch(() => {
 				console.log('Ocorreu um erro', e);
