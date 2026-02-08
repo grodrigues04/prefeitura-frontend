@@ -34,7 +34,7 @@ function Cadastro() {
 			reset({
 				...pacienteSelecionado.value,
 				data_entrada: dayjs(pacienteSelecionado.value.data_entrada, 'DD/MM/YYYY'),
-				saida_exame: dayjs(pacienteSelecionado.value.saida_exame, 'DD/MM/YYYY')
+				data_nascimento: dayjs(pacienteSelecionado.value.data_nascimento, 'DD/MM/YYYY')
 			});
 		}
 	}, []);
@@ -42,7 +42,7 @@ function Cadastro() {
 	const cadastrar = (data) => {
 		carregando.value = true;
 		cadastroAlerta.value = false;
-		data.saida_exame = data.saida_exame.format('DD/MM/YYYY');
+		data.data_nascimento = data.data_nascimento.format('DD/MM/YYYY');
 		data.data_entrada = data.data_entrada.format('DD/MM/YYYY');
 		data.alteracao = ehAlteracao.value;
 		axios
@@ -107,7 +107,7 @@ function Cadastro() {
 								render={({ field }) => (
 									<LocalizationProvider dateAdapter={AdapterDayjs}>
 										<DatePicker
-											maxDate={currentYear}
+											disableFuture
 											label="Data de entrada"
 											open={openDataEntrada.value}
 											// onClick={() => {
@@ -142,12 +142,13 @@ function Cadastro() {
 						</Grid>
 						<Grid item>
 							<Controller
-								name="saida_exame"
+								name="data_nascimento"
 								control={control}
 								render={({ field }) => (
 									<LocalizationProvider dateAdapter={AdapterDayjs}>
 										<DatePicker
-											label="Saída dos exames"
+											disableFuture
+											label="Data de nascimento"
 											value={field.value || null}
 											open={openDataSaida.value}
 											onOpen={() => {

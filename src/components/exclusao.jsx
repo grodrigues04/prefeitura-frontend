@@ -40,7 +40,10 @@ function Exclusao() {
 			>
 				Paciente: {pacienteSelecionado.value?.nome_paciente}
 			</Typography>
-			<Typography color="primary">Confirma a exclusão do paciente?</Typography>
+			<Typography color="primary">
+				Confirma o recebimento do exame ? <br />
+				(Paciente sera excluido)
+			</Typography>
 			<Button
 				variant="contained"
 				color="warning"
@@ -48,7 +51,7 @@ function Exclusao() {
 					excluir();
 				}}
 			>
-				Excluir
+				Confirmar
 			</Button>
 			<Button
 				variant="contained"

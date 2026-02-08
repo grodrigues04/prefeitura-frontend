@@ -8,7 +8,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import TablePagination from '@mui/material/TablePagination';
 import LinearProgress from '@mui/material/LinearProgress';
-
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Chip from '@mui/material/Chip';
 import {
 	atualizar,
 	dadosTabela,
@@ -63,7 +65,9 @@ function Tabela() {
 	});
 
 	const rowsPerPage = useSignal(5);
-
+	const handleDelete = () => {
+		console.log('asd');
+	};
 	const handleChangePage = (event, newPage) => {
 		page.value = newPage;
 	};
@@ -83,9 +87,10 @@ function Tabela() {
 						<TableRow>
 							<TableCell>Nome do Paciente</TableCell>
 							<TableCell>Data de Entrada</TableCell>
-							<TableCell>Saída dos Exames</TableCell>
+							<TableCell>Data de nascimento</TableCell>
 							<TableCell>Editar</TableCell>
-							<TableCell>Excluir</TableCell>
+							{/* <TableCell>Excluir</TableCell> */}
+							<TableCell>Recebeu Exame?</TableCell>
 						</TableRow>
 					</CoreTableHead>
 					<TableBody>
@@ -94,7 +99,7 @@ function Tabela() {
 								<TableRow>
 									<TableCell>{paciente.nome_paciente}</TableCell>
 									<TableCell>{paciente.data_entrada}</TableCell>
-									<TableCell>{paciente.saida_exame}</TableCell>
+									<TableCell>{paciente.data_nascimento}</TableCell>
 									<TableCell>
 										<EditIcon
 											onClick={() => {
@@ -104,12 +109,36 @@ function Tabela() {
 											}}
 										/>
 									</TableCell>
-									<TableCell>
+									{/* <TableCell>
 										<DeleteIcon
 											onClick={() => {
 												pacienteSelecionado.value = paciente;
 												modalExclusao.value = true;
 											}}
+										/>
+									</TableCell> */}
+									<TableCell>
+										{/* <FormControlLabel
+											label="Recebeu exame ?"
+											control={
+												<Checkbox
+													checked={false}
+													// onChange={handleChange}
+													slotProps={{
+														input: { 'aria-label': 'controlled' }
+													}}
+												/>
+											}
+										></FormControlLabel> */}
+
+										<Chip
+											label="Não"
+											color="warning"
+											onDelete={() => {
+												pacienteSelecionado.value = paciente;
+												modalExclusao.value = true;
+											}}
+											deleteIcon={<EditIcon />}
 										/>
 									</TableCell>
 								</TableRow>
