@@ -86,8 +86,8 @@ function Tabela() {
 					<CoreTableHead>
 						<TableRow>
 							<TableCell>Nome do Paciente</TableCell>
-							<TableCell>Data de Entrada</TableCell>
 							<TableCell>Data de nascimento</TableCell>
+							<TableCell>Data de Entrada</TableCell>
 							<TableCell>Editar</TableCell>
 							{/* <TableCell>Excluir</TableCell> */}
 							<TableCell>Recebeu Exame?</TableCell>
@@ -98,8 +98,8 @@ function Tabela() {
 							dadosTabela.value?.map((paciente, index) => (
 								<TableRow>
 									<TableCell>{paciente.nome_paciente}</TableCell>
-									<TableCell>{paciente.data_entrada}</TableCell>
 									<TableCell>{paciente.data_nascimento}</TableCell>
+									<TableCell>{paciente.data_entrada}</TableCell>
 									<TableCell>
 										<EditIcon
 											onClick={() => {
