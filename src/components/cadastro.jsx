@@ -112,12 +112,6 @@ function Cadastro() {
 											format="DD/MM/YYYY"
 											label="Data de entrada"
 											open={openDataEntrada.value}
-											// onClick={() => {
-											// 	batch(() => {
-											// 		openDataEntrada.value = true;
-											// 		// openDataSaida.value = false;
-											// 	});
-											// }}
 											onOpen={() => {
 												batch(() => {
 													openDataEntrada.value = true;
@@ -131,10 +125,9 @@ function Cadastro() {
 												textField: {
 													required: true,
 													fullWidth: true,
-													onClick: () => (openDataEntrada.value = true),
-													inputProps: {
-														readOnly: true
-													}
+													readOnly: true,
+
+													onClick: () => (openDataEntrada.value = true)
 												}
 											}}
 										/>
@@ -167,6 +160,7 @@ function Cadastro() {
 											}}
 											slotProps={{
 												textField: {
+													readOnly: true,
 													required: true,
 													fullWidth: true,
 													onClick: () => (openDataSaida.value = true)
