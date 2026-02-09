@@ -108,6 +108,8 @@ function Cadastro() {
 									<LocalizationProvider dateAdapter={AdapterDayjs}>
 										<DatePicker
 											disableFuture
+											views={['day', 'month', 'year']}
+											format="DD/MM/YYYY"
 											label="Data de entrada"
 											open={openDataEntrada.value}
 											// onClick={() => {
@@ -149,6 +151,8 @@ function Cadastro() {
 										<DatePicker
 											disableFuture
 											label="Data de nascimento"
+											views={['day', 'month', 'year']}
+											format="DD/MM/YYYY"
 											value={field.value || null}
 											open={openDataSaida.value}
 											onOpen={() => {
