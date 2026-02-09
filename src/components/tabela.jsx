@@ -145,7 +145,12 @@ function Tabela() {
 							))
 						) : (
 							<TableRow>
-								<TableCell>{mensagemUser.value}</TableCell>
+								<TableCell
+									colSpan={5}
+									align="center"
+								>
+									{mensagemUser.value}
+								</TableCell>
 							</TableRow>
 						)}
 						{carregandoDados.value && (
