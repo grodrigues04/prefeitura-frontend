@@ -1,7 +1,7 @@
 import { Stack } from '@mui/material';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { pacienteSelecionado, modalAberto, modalExclusao, atualizar } from '../signals';
+import { pacienteSelecionado, modalExclusao, atualizar,  } from '../signals';
 import axios from 'axios';
 import { useSignals, useSignal } from '@preact/signals-react/runtime';
 import LinearProgress from '@mui/material/LinearProgress';

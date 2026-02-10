@@ -3,14 +3,12 @@ import { useSignals, useSignal } from '@preact/signals-react/runtime';
 import { batch } from '@preact/signals';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TextField } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { modalAberto, cadastroAlerta, atualizar, pacienteSelecionado, ehAlteracao } from '../signals/index.js';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { cadastroAlerta, atualizar, pacienteSelecionado, ehAlteracao } from '../signals/index.js';
 import { Stack } from '@mui/material';
 import dayjs from 'dayjs';
 import axios from 'axios';
@@ -21,12 +19,9 @@ import LinearProgress from '@mui/material/LinearProgress';
 
 function Cadastro() {
 	useSignals();
-	console.log("Teste")
 	const carregando = useSignal(false);
 	const openDataEntrada = useSignal(false);
 	const openDataSaida = useSignal(false);
-	const defaultValues = useSignal();
-	const currentYear = dayjs();
 	const { control, handleSubmit, reset } = useForm({});
 	const apiUrl = import.meta.env.VITE_API_URL;
 	const mensagem = useSignal('');

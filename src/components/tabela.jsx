@@ -5,11 +5,8 @@ import { useSignals, useSignal, useSignalEffect } from '@preact/signals-react/ru
 import axios from 'axios';
 import { useEffect } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import TablePagination from '@mui/material/TablePagination';
 import LinearProgress from '@mui/material/LinearProgress';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Chip from '@mui/material/Chip';
 import {
 	atualizar,
@@ -25,6 +22,7 @@ import {
 } from '../signals';
 function Tabela() {
 	useSignals();
+
 	const apiUrl = import.meta.env.VITE_API_URL;
 	const mensagemUser = useSignal('');
 	const carregandoDados = useSignal(true);
@@ -65,9 +63,7 @@ function Tabela() {
 	});
 
 	const rowsPerPage = useSignal(5);
-	const handleDelete = () => {
-		console.log('asd');
-	};
+
 	const handleChangePage = (event, newPage) => {
 		page.value = newPage;
 	};
@@ -89,7 +85,6 @@ function Tabela() {
 							<TableCell>Data de nascimento</TableCell>
 							<TableCell>Data de Entrada</TableCell>
 							<TableCell>Editar</TableCell>
-							{/* <TableCell>Excluir</TableCell> */}
 							<TableCell>Recebeu Exame?</TableCell>
 						</TableRow>
 					</CoreTableHead>
@@ -109,28 +104,7 @@ function Tabela() {
 											}}
 										/>
 									</TableCell>
-									{/* <TableCell>
-										<DeleteIcon
-											onClick={() => {
-												pacienteSelecionado.value = paciente;
-												modalExclusao.value = true;
-											}}
-										/>
-									</TableCell> */}
 									<TableCell>
-										{/* <FormControlLabel
-											label="Recebeu exame ?"
-											control={
-												<Checkbox
-													checked={false}
-													// onChange={handleChange}
-													slotProps={{
-														input: { 'aria-label': 'controlled' }
-													}}
-												/>
-											}
-										></FormControlLabel> */}
-
 										<Chip
 											label="Não"
 											color="warning"
@@ -153,7 +127,7 @@ function Tabela() {
 								</TableCell>
 							</TableRow>
 						)}
-						{carregandoDados.value && (
+						{carregandoDados.value && !dadosTabela.value.length && (
 							<TableRow>
 								<TableCell
 									colSpan={5}
