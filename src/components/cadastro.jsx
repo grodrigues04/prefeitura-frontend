@@ -21,6 +21,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 
 function Cadastro() {
 	useSignals();
+	console.log("Teste")
 	const carregando = useSignal(false);
 	const openDataEntrada = useSignal(false);
 	const openDataSaida = useSignal(false);
